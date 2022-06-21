@@ -38,11 +38,7 @@ function handleAddTaskFormSubmit(e: any): void {
     e.preventDefault();
     addTask(addTaskInput.value);
 
-    // Set every task delete btn to handle delete process
-    const allTasks = [...tasksContainer.children];
-    allTasks.forEach(task => {
-        task.children[1].addEventListener("click", handleDeleteTaskBtnClick)
-    });
+
 }
 
 
@@ -59,3 +55,18 @@ function generateId(): TaskId {
     const id: TaskId = Math.floor(Math.random() * 100000);
     return id
 }
+
+
+/* Observers */
+
+const taskObserver = new MutationObserver(() => {
+    // Set every task delete btn to handle delete process
+    const allTasks = [...tasksContainer.children];
+    allTasks.forEach(task => {
+        task.children[1].addEventListener("click", handleDeleteTaskBtnClick)
+    });
+});
+
+// If new task is created, event listener is added to task delete btn
+taskObserver.observe(tasksContainer, {childList: true});
+

@@ -29,11 +29,6 @@ function handleDeleteTaskBtnClick(e) {
 function handleAddTaskFormSubmit(e) {
     e.preventDefault();
     addTask(addTaskInput.value);
-    // Set every task delete btn to handle delete process
-    const allTasks = [...tasksContainer.children];
-    allTasks.forEach(task => {
-        task.children[1].addEventListener("click", handleDeleteTaskBtnClick);
-    });
 }
 // Event Listeners
 addTaskSubmit.addEventListener("click", handleAddTaskFormSubmit);
@@ -41,3 +36,14 @@ function generateId() {
     const id = Math.floor(Math.random() * 100000);
     return id;
 }
+/* Observers */
+const taskObserver = new MutationObserver(() => {
+    // Set every task delete btn to handle delete process
+    const allTasks = [...tasksContainer.children];
+    allTasks.forEach(task => {
+        task.children[1].addEventListener("click", handleDeleteTaskBtnClick);
+    });
+});
+// If new task is created, event listener is added to task delete btn
+taskObserver.observe(tasksContainer, { childList: true });
+//# sourceMappingURL=index.js.map
