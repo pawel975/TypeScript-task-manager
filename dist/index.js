@@ -4,36 +4,40 @@ const addTaskForm = document.querySelector(".add-task__form");
 const addTaskInput = document.querySelector("#add-task__input");
 const addTaskSubmit = document.querySelector(".add-task__submit");
 const tasksContainer = document.querySelector(".tasks-container__tasks");
-const allTasks = document.querySelectorAll(".singleTask");
 // Create task and Add it to task container
 function addTask(taskName) {
     const singleTaskContainer = document.createElement("div");
-    singleTaskContainer.setAttribute("class", "singleTask");
+    singleTaskContainer.classList.add('singleTask');
+    singleTaskContainer.setAttribute("id", generateId());
     const taskNameContainer = document.createElement("span");
     taskNameContainer.textContent = taskName;
-    singleTaskContainer.setAttribute("id", generateId());
+    const taskDeleteBtn = document.createElement("button");
     singleTaskContainer.appendChild(taskNameContainer);
+    singleTaskContainer.appendChild(taskDeleteBtn);
     tasksContainer.appendChild(singleTaskContainer);
 }
 // Delete task based on id
 function deleteTask(taskId) {
-    const taskToDelete = [...tasksContainer.children].filter(task => task.id === taskId);
-    console.log(taskToDelete);
-    // tasksContainer.remove(taskToDelete)
+    const taskToDelete = [...tasksContainer.children].filter(task => task.id === taskId)[0];
+    if (taskToDelete)
+        tasksContainer.removeChild(taskToDelete);
 }
+/* Event handlers */
 function handleDeleteTaskBtnClick(e) {
-    deleteTask(e.target.id);
+    deleteTask(e.target.parentNode.id);
 }
 function handleAddTaskFormSubmit(e) {
     e.preventDefault();
     addTask(addTaskInput.value);
+    // Set every task delete btn to handle delete process
+    const allTasks = [...tasksContainer.children];
+    allTasks.forEach(task => {
+        task.children[1].addEventListener("click", handleDeleteTaskBtnClick);
+    });
 }
+// Event Listeners
+addTaskSubmit.addEventListener("click", handleAddTaskFormSubmit);
 function generateId() {
     const id = Math.floor(Math.random() * 100000);
     return id;
 }
-addTaskSubmit.addEventListener("click", handleAddTaskFormSubmit);
-allTasks.forEach(element => {
-    element.addEventListener("click", deleteTask);
-});
-// window.addEventListener("click", deleteTask)

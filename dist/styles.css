@@ -136,5 +136,36 @@ input[type="submit"] {
     box-shadow: 0rem 0rem 0.1rem 0.1rem var(--clr-primary-1);
 }
 
+.singleTask {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+span {
+    pointer-events: none;
+}
+
+.singleTask button {
+    position: relative;
+    height: 1.5rem;
+    aspect-ratio: 1;  
+    border: none;
+    background: none;
+}
+
+.singleTask button:after {
+    cursor: pointer;
+    position: absolute;
+    content: url("../assets/img/delete-icon.svg.svg");
+    height: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    transform: translate(-50%,-50%);
+    color: var(--clr-primary-1);
+}
+
 
 
