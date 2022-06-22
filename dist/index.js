@@ -17,11 +17,11 @@ function addToTaskList(taskName) {
     resetAddTaskInput();
 }
 function renderTasks(taskList) {
-    // clear tasks container before re-render
+    // clear tasks container before render or re-render
     [...tasksContainer.children].forEach(task => {
         tasksContainer.removeChild(task);
     });
-    // re-render tasks
+    // render tasks
     taskList.forEach(task => {
         const singleTaskContainer = document.createElement("div");
         singleTaskContainer.classList.add('singleTask');
@@ -38,7 +38,6 @@ function renderTasks(taskList) {
     allTasks.forEach(task => {
         task.children[1].addEventListener("click", handleDeleteTaskBtnClick);
     });
-    saveTasksToLocalStorage(taskList);
 }
 // Delete task based on id
 function deleteTask(clickedTaskId) {
@@ -60,13 +59,13 @@ function getTasksFromLocalStorage() {
         const localStorageTasks = JSON.parse(localStorageRecord);
         return localStorageTasks;
     }
-    else {
+    else
         return [];
-    }
 }
 /* Event handlers */
 function handleDeleteTaskBtnClick(e) {
     deleteTask(e.target.parentNode.id);
+    saveTasksToLocalStorage(taskList);
     renderTasks(taskList);
 }
 function handleAddTaskFormSubmit(e) {
@@ -78,6 +77,7 @@ function handleAddTaskFormSubmit(e) {
         alert("Task must contain at least 3 letters");
         addTaskInput.focus();
     }
+    saveTasksToLocalStorage(taskList);
     renderTasks(taskList);
 }
 // Event Listeners
