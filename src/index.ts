@@ -14,6 +14,7 @@ let taskList: TaskListElement[] = getTasksFromLocalStorage()
 // Initial tasks render
 renderTasks(taskList)
 
+
 // Create task object and add it to taskList array
 function addToTaskList(taskName: string): void {
 
@@ -27,15 +28,14 @@ function addToTaskList(taskName: string): void {
     resetAddTaskInput();
 }
 
-
 function renderTasks(taskList: TaskListElement[]) {
 
-    // clear tasks container before re-render
+    // clear tasks container before render or re-render
     [...tasksContainer.children].forEach(task => {
         tasksContainer.removeChild(task);
     });
 
-    // re-render tasks
+    // render tasks
     taskList.forEach(task => {
         const singleTaskContainer = document.createElement("div");
         singleTaskContainer.classList.add('singleTask')
@@ -56,8 +56,6 @@ function renderTasks(taskList: TaskListElement[]) {
     allTasks.forEach(task => {
         task.children[1].addEventListener("click", handleDeleteTaskBtnClick)
     });
-
-    saveTasksToLocalStorage(taskList);
     
 }
 
@@ -71,7 +69,7 @@ function deleteTask(clickedTaskId: number | string): void {
     })
 }
 
-function resetAddTaskInput():void {
+function resetAddTaskInput(): void {
     addTaskInput.value = "";
 }
 
@@ -88,9 +86,7 @@ function getTasksFromLocalStorage(): TaskListElement[] {
         const localStorageTasks = JSON.parse(localStorageRecord);
         return localStorageTasks 
         
-    } else {
-        return [];
-    }
+    } else return [];
 
 }
 
@@ -99,6 +95,7 @@ function getTasksFromLocalStorage(): TaskListElement[] {
 
 function handleDeleteTaskBtnClick(e: any): void {
     deleteTask(e.target.parentNode.id);
+    saveTasksToLocalStorage(taskList);
     renderTasks(taskList)
 }
 
@@ -111,7 +108,8 @@ function handleAddTaskFormSubmit(e: any): void {
         alert("Task must contain at least 3 letters");
         addTaskInput.focus();
     }
-    
+
+    saveTasksToLocalStorage(taskList);
     renderTasks(taskList)
 }
 
