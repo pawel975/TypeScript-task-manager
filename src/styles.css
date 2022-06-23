@@ -159,13 +159,12 @@ span {
 .singleTask button:after {
     cursor: pointer;
     position: absolute;
-    content: url("../assets/img/delete-icon.svg.svg");
+    content: url("./delete-icon.svg");
     height: 100%;
     aspect-ratio: 1;
     padding: 0;
     transform: translate(-50%,-50%);
     color: var(--clr-primary-1);
 }
-
 
 

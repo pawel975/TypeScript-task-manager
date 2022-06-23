@@ -1,19 +1,15 @@
+import { generateId, getTasksFromLocalStorage, saveTasksToLocalStorage } from "./helperFunctions";
+import { TaskListElement } from "./interfaces";
+
 // Getting elements
-const addTaskForm: HTMLFormElement = document.querySelector(".add-task__form")!;
 const addTaskInput: HTMLInputElement = document.querySelector("#add-task__input")!;
 const addTaskSubmit: HTMLInputElement = document.querySelector(".add-task__submit")!;
 const tasksContainer: HTMLDivElement = document.querySelector(".tasks-container__tasks")!;
-
-interface TaskListElement {
-    id: string | number,
-    taskName: string
-}
 
 let taskList: TaskListElement[] = getTasksFromLocalStorage()
 
 // Initial tasks render
 renderTasks(taskList)
-
 
 // Create task object and add it to taskList array
 function addToTaskList(taskName: string): void {
@@ -44,7 +40,7 @@ function renderTasks(taskList: TaskListElement[]) {
         const taskNameContainer = document.createElement("span");
         taskNameContainer.textContent = task.taskName;
         const taskDeleteBtn = document.createElement("button");
-        
+        taskDeleteBtn.style.backgroundImage = "./delete-icon.png"
         singleTaskContainer.appendChild(taskNameContainer);
         singleTaskContainer.appendChild(taskDeleteBtn);
 
@@ -71,23 +67,6 @@ function deleteTask(clickedTaskId: number | string): void {
 
 function resetAddTaskInput(): void {
     addTaskInput.value = "";
-}
-
-function saveTasksToLocalStorage(taskList: TaskListElement[]): void {
-    localStorage.setItem("tasks", JSON.stringify(taskList))
-}
-
-function getTasksFromLocalStorage(): TaskListElement[] {
-    
-    const localStorageRecord = localStorage.getItem("tasks");
-
-    if (localStorageRecord) {
-        
-        const localStorageTasks = JSON.parse(localStorageRecord);
-        return localStorageTasks 
-        
-    } else return [];
-
 }
 
 
@@ -119,11 +98,3 @@ function handleAddTaskFormSubmit(e: any): void {
 addTaskSubmit.addEventListener("click", handleAddTaskFormSubmit)
 
 
-/* Helper functions */
-
-type TaskId =  number | string
-
-function generateId(): TaskId {
-    const id: TaskId = Math.floor(Math.random() * 100000);
-    return id
-}
