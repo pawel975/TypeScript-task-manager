@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: './src/index.ts', // compile index.ts file and also all imported files etc.
   devtool: 'inline-source-map',
-  mode: "production",
+  mode: "development",
   module: {
     rules: [
       {
@@ -27,7 +27,7 @@ module.exports = {
     extensions: ['.ts', '.js'],
   },
   output: {
-    publicPath: "auto",
+    // publicPath: "dist",
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },

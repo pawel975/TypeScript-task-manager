@@ -11,6 +11,7 @@ let taskList: TaskListElement[] = getTasksFromLocalStorage()
 // Initial tasks render
 renderTasks(taskList)
 
+
 // Create task object and add it to taskList array
 function addToTaskList(taskName: string): void {
 
@@ -40,7 +41,7 @@ function renderTasks(taskList: TaskListElement[]) {
         const taskNameContainer = document.createElement("span");
         taskNameContainer.textContent = task.taskName;
         const taskDeleteBtn = document.createElement("button");
-        taskDeleteBtn.style.backgroundImage = "./delete-icon.png"
+        
         singleTaskContainer.appendChild(taskNameContainer);
         singleTaskContainer.appendChild(taskDeleteBtn);
 
@@ -84,6 +85,7 @@ function handleAddTaskFormSubmit(e: any): void {
     if (addTaskInput.value.length >= 3) {
         addToTaskList(addTaskInput.value);
     } else {
+        console.log(addTaskInput.value.length)
         alert("Task must contain at least 3 letters");
         addTaskInput.focus();
     }
