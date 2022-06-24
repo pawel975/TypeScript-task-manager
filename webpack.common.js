@@ -3,8 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/index.ts', // compile index.ts file and also all imported files etc.
-  devtool: 'inline-source-map',
-  mode: "development",
   module: {
     rules: [
       {
@@ -27,16 +25,8 @@ module.exports = {
     extensions: ['.ts', '.js'],
   },
   output: {
-    // publicPath: "dist",
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-  },
-  devServer: {
-    static: './dist',
-    open: true
-  },
-  performance: {
-    hints: false,
   },
   plugins: [
     new HtmlWebpackPlugin({

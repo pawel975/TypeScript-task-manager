@@ -1,5 +1,6 @@
 import { generateId, getTasksFromLocalStorage, saveTasksToLocalStorage } from "./helperFunctions";
 import { TaskListElement } from "./interfaces";
+import "./styles.css"
 
 // Getting elements
 const addTaskInput: HTMLInputElement = document.querySelector("#add-task__input")!;
