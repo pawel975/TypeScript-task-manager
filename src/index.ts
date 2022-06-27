@@ -3,9 +3,9 @@ import { TaskListElement } from "./interfaces";
 import "./styles.css"
 
 // Getting elements
-const addTaskInput: HTMLInputElement = document.querySelector("#add-task__input")!;
-const addTaskSubmit: HTMLInputElement = document.querySelector(".add-task__submit")!;
-const tasksContainer: HTMLDivElement = document.querySelector(".tasks-container__tasks")!;
+const addTaskInput = <HTMLInputElement>document.querySelector("#add-task__input");
+const addTaskSubmit = <HTMLInputElement>document.querySelector(".add-task__submit");
+const tasksContainer = <HTMLDivElement>document.querySelector(".tasks-container__tasks");
 
 let taskList: TaskListElement[] = getTasksFromLocalStorage()
 
