@@ -1,5 +1,5 @@
-import { generateId, getTasksFromLocalStorage, saveTasksToLocalStorage } from "./helperFunctions";
-import { TaskListElement } from "./interfaces";
+import { generateId, getTasksFromLocalStorage, resetAddTaskInput, saveTasksToLocalStorage } from "./helperFunctions";
+import { TaskTemplateListElement } from "./interfaces";
 import "./styles.css"
 
 // Getting elements
@@ -7,26 +7,27 @@ const addTaskInput = <HTMLInputElement>document.querySelector("#add-task__input"
 const addTaskSubmit = <HTMLInputElement>document.querySelector(".add-task__submit");
 const tasksContainer = <HTMLDivElement>document.querySelector(".tasks-container__tasks");
 
-let taskList: TaskListElement[] = getTasksFromLocalStorage()
+let taskTemplateList: TaskTemplateListElement[] = getTasksFromLocalStorage()
 
 // Initial tasks render
-renderTasks(taskList)
+renderTasks(taskTemplateList)
 
 
 // Create task object and add it to taskList array
 function addToTaskList(taskName: string): void {
 
-    const newTask: TaskListElement = 
+    const newTask: TaskTemplateListElement = 
     {
         id: generateId(),
-        taskName: taskName
+        taskName: taskName,
+        completionStatus: "active"
     }
-    taskList.push(newTask);
+    taskTemplateList.push(newTask);
 
-    resetAddTaskInput();
+    resetAddTaskInput(addTaskInput);
 }
 
-function renderTasks(taskList: TaskListElement[]) {
+function renderTasks(taskTemplateList: TaskTemplateListElement[]) {
 
     // clear tasks container before render or re-render
     [...tasksContainer.children].forEach(task => {
@@ -34,50 +35,92 @@ function renderTasks(taskList: TaskListElement[]) {
     });
 
     // render tasks
-    taskList.forEach(task => {
+    taskTemplateList.forEach(taskTemplate => {
         const singleTaskContainer = document.createElement("div");
-        singleTaskContainer.classList.add('singleTask')
-        singleTaskContainer.setAttribute("id", <string>task.id)
+        singleTaskContainer.classList.add('singleTask');
+        singleTaskContainer.setAttribute("id", <string>taskTemplate.id);
+        singleTaskContainer.setAttribute("data-completion-status", taskTemplate.completionStatus)
 
         const taskNameContainer = document.createElement("span");
-        taskNameContainer.textContent = task.taskName;
+        taskNameContainer.textContent = taskTemplate.taskName;
+        
+        const taskCompleteBtn = document.createElement("button");
+        taskCompleteBtn.classList.add("complete-task-btn");
+
         const taskDeleteBtn = document.createElement("button");
+        taskDeleteBtn.classList.add("delete-task-btn");
         
         singleTaskContainer.appendChild(taskNameContainer);
+        singleTaskContainer.appendChild(taskCompleteBtn);
         singleTaskContainer.appendChild(taskDeleteBtn);
 
         tasksContainer.appendChild(singleTaskContainer);
     })
 
-    // Set every task delete btn to handle delete process
+    // Set every task btn event
     const allTasks = [...tasksContainer.children];
     allTasks.forEach(task => {
-        task.children[1].addEventListener("click", handleDeleteTaskBtnClick)
+
+        [...task.children].forEach(child => {
+            if (child.nodeName === "BUTTON") {
+
+                if (child.className === "delete-task-btn") {
+                    child.addEventListener("click", handleDeleteTaskBtnClick)
+                } else if (child.className === "complete-task-btn") {
+                    child.addEventListener("click", handleCompleteTaskBtnClick)
+                }
+
+            }
+        })
+
     });
     
 }
 
 // Delete task based on id
-function deleteTask(clickedTaskId: number | string): void {
+function deleteTask(taskDeleteBtn: HTMLButtonElement): void {
 
-    taskList.forEach(task => {
-        if (task.id === Number(clickedTaskId)) {
-            taskList.splice(taskList.indexOf(task), 1)
+    const taskContainerId = taskDeleteBtn.parentElement.id;
+
+    taskTemplateList.forEach(taskTemplate => {
+        if (taskTemplate.id === Number(taskContainerId)) {
+            taskTemplateList.splice(taskTemplateList.indexOf(taskTemplate), 1)
         }
     })
 }
 
-function resetAddTaskInput(): void {
-    addTaskInput.value = "";
+// Toggle task completion status
+function toggleTaskCompletionStatus(taskCompleteBtn: HTMLButtonElement): void {
+    
+    const taskContainer = taskCompleteBtn.parentElement;
+    const taskCompletionStatus = taskContainer.getAttribute("data-completion-status");
+
+    if (taskCompletionStatus === "active") {
+        taskContainer.setAttribute("data-completion-status", "completed");
+    }  else if (taskCompletionStatus === "completed") {
+        taskContainer.setAttribute("data-completion-status", "active");
+    }
+
+    taskTemplateList.forEach(taskTemplate => {
+        if (taskTemplate.id === Number(taskContainer.id)) {
+            taskTemplate.completionStatus = taskContainer.getAttribute("data-completion-status");
+        }
+    })
 }
 
 
 /* Event handlers */ 
 
 function handleDeleteTaskBtnClick(e: any): void {
-    deleteTask(e.target.parentNode.id);
-    saveTasksToLocalStorage(taskList);
-    renderTasks(taskList)
+    deleteTask(e.target);
+    saveTasksToLocalStorage(taskTemplateList);
+    renderTasks(taskTemplateList)
+}
+
+function handleCompleteTaskBtnClick(e: any): void {
+    toggleTaskCompletionStatus(e.target);
+    saveTasksToLocalStorage(taskTemplateList);
+    renderTasks(taskTemplateList)
 }
 
 function handleAddTaskFormSubmit(e: any): void {
@@ -91,8 +134,8 @@ function handleAddTaskFormSubmit(e: any): void {
         addTaskInput.focus();
     }
 
-    saveTasksToLocalStorage(taskList);
-    renderTasks(taskList)
+    saveTasksToLocalStorage(taskTemplateList);
+    renderTasks(taskTemplateList)
 }
 
 

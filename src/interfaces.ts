@@ -1,5 +1,6 @@
 
-export interface TaskListElement {
+export interface TaskTemplateListElement {
     id: string | number,
-    taskName: string
+    taskName: string,
+    completionStatus: string,
 }

@@ -155,9 +155,11 @@ input[type="submit"]:hover {
 
 span {
     pointer-events: none;
+    margin-right: auto;
 }
 
 .singleTask button {
+    margin-inline: .5rem;
     position: relative;
     height: 1.5rem;
     aspect-ratio: 1;  
@@ -165,10 +167,26 @@ span {
     background: none;
 }
 
-.singleTask button:after {
+.singleTask[data-completion-status="completed"] {
+    color: rgba(0,0,0,0.3);
+    text-decoration: line-through;
+}
+
+.singleTask button.delete-task-btn:after {
     cursor: pointer;
     position: absolute;
     content: url("./delete-icon.svg");
+    height: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    transform: translate(-50%,-50%);
+    color: var(--clr-primary-1);
+}
+
+.singleTask button.complete-task-btn:after {
+    cursor: pointer;
+    position: absolute;
+    content: url("./complete-icon.svg");
     height: 100%;
     aspect-ratio: 1;
     padding: 0;
