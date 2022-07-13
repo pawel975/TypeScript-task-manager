@@ -6,6 +6,7 @@ import "./styles.css"
 const addTaskInput = <HTMLInputElement>document.querySelector("#add-task__input");
 const addTaskSubmit = <HTMLInputElement>document.querySelector(".add-task__submit");
 const tasksContainer = <HTMLDivElement>document.querySelector(".tasks-container__tasks");
+const filterSectionInputs = document.getElementsByName("filter-option");
 
 let taskTemplateList: TaskTemplateListElement[] = getTasksFromLocalStorage()
 
@@ -29,6 +30,8 @@ function addToTaskList(taskName: string): void {
 
 function renderTasks(taskTemplateList: TaskTemplateListElement[]) {
 
+    const status = [...filterSectionInputs].forEach(el => console.log(el))
+    
     // clear tasks container before render or re-render
     [...tasksContainer.children].forEach(task => {
         tasksContainer.removeChild(task);
